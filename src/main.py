@@ -15,7 +15,6 @@ if __name__ == "__main__":
 
     try:
         login(username, password)
-        login(username, password)
 
         bank = create_bank()
         create_branch(bank["id"])
