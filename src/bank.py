@@ -1,64 +1,61 @@
-import json
-
-import requests
 from faker import Faker
 
 import helpers.data as data
+import helpers.util as util
 from helpers.decorations import *
+from helpers.RequestBuilder import RequestBuilder
 from user import isLoggedIn
 
 fake = Faker()
-url = "http://localhost:8083"
+base_url = util.base_from_env("DOMAIN", "BANK_SERVICE_PORT")
+token = data.get_value("token")
 
 
-@print_response
+def _fake_bank():
+    return {
+        "routingNumber": fake.aba(),
+        "address": fake.street_address(),
+        "city": fake.city(),
+        "state": "TX",
+        "zipcode": "11111"
+    }
+
+def _fake_branch(bankId):
+    return {
+        "name": "branch",
+        "phone": fake.phone_number(),
+        "address": fake.street_address(),
+        "city": fake.city(),
+        "state": "TX",
+        "zipcode": "11111",
+        "bankID": bankId
+    }
+
 def create_bank():
     if not isLoggedIn():
         print("You need to be logged in before you can create a bank")
         return
 
-    path = "/banks"
+    bank_json = util.to_json(_fake_bank())
 
-    response = requests.request("POST",
-                                url + path,
-                                headers={
-                                    'Authorization': data.get_value("token"),
-                                    'Content-Type': 'application/json'
-                                },
-                                data=json.dumps({
-                                    "routingNumber": fake.aba(),
-                                    "address": fake.street_address(),
-                                    "city": fake.city(),
-                                    "state": "TX",
-                                    "zipcode": "11111"
-                                }))
+    return (RequestBuilder()
+                .with_bearer_token(token)
+                .with_default_headers()
+                .with_method("POST")
+                .with_url(base_url + "/banks")
+                .with_data(bank_json)
+                .execute_request())
 
-    return response
-
-
-@print_response
 def create_branch(bankId):
     if not isLoggedIn():
         print("You need to be logged in before you can create a branch")
         return
 
-    path = "/branches"
+    branch_json = util.to_json(_fake_branch(bankId))
 
-    response = requests.request(
-        "POST",
-        url + path,
-        headers={
-            'Authorization': data.get_value("token"),
-            'Content-Type': 'application/json'
-        },
-        data=json.dumps({
-            "name": "branch",
-            "phone": fake.phone_number(),
-            "address": fake.street_address(),
-            "city": fake.city(),
-            "state": "TX",
-            "zipcode": "11111",
-            "bankID": bankId
-        }))
-
-    return response
+    return (RequestBuilder()
+                .with_bearer_token(token)
+                .with_method("POST")
+                .with_url(base_url + "/branches")
+                .with_data(branch_json)
+                .execute_request())

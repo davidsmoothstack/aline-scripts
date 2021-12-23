@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from requests.api import request
+import helpers.data as data 
 
 @dataclass(init=False)
 class RequestBuilder():
@@ -16,8 +17,8 @@ class RequestBuilder():
         self.url = url
         return self
 
-    def with_headers(self, headers):
-        self.headers = headers
+    def with_header(self, header):
+        self.headers.update(header)
         return self
 
     def with_data(self, data):
@@ -25,7 +26,11 @@ class RequestBuilder():
         return self
 
     def with_default_headers(self):
-        self.headers = { "Content-Type": "application/json"}
+        self.headers["Content-Type"] = "application/json"
+        return self
+        
+    def with_bearer_token(self, token):
+        self.headers["Authorization"] = token
         return self
 
     def execute_request(self):
@@ -41,18 +46,3 @@ class RequestBuilder():
             print("")
 
         return response
-
-# TODO: Remove
-    # def print_response(response):
-    #     if not response.ok:
-    #         raise Exception(f"{response.url} failed: {response.text}")
-
-    #     print(f"{response.url} successful")
-    #     print("")
-
-    #     if response.status_code == 201:
-    #         print(response.json())
-    #         print("")
-    #         return response.json()
-
-    #     return None
