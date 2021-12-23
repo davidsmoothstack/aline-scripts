@@ -1,13 +1,13 @@
 from faker import Faker
 
-import helpers.data as data
+import helpers.store as store
 import helpers.util as util
 from helpers.RequestBuilder import RequestBuilder
 from user import isLoggedIn
 
 fake = Faker()
 base_url = util.base_from_env("DOMAIN", "BANK_SERVICE_PORT")
-token = data.get_value("token")
+token = store.get_value("token")
 
 
 def _fake_bank():

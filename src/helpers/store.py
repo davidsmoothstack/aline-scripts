@@ -1,7 +1,7 @@
 import json
 from os.path import exists
 
-json_file = 'src/helpers/data.json'
+json_file = 'src/helpers/store.json'
 
 
 def _read_file(json_file):

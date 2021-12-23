@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from requests.api import request
 
-import helpers.data as data
+import helpers.store as store
 
 
 @dataclass()

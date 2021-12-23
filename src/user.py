@@ -2,7 +2,7 @@ from faker import Faker
 from functional import util
 from requests.models import Response
 
-import helpers.data as data
+import helpers.store as store
 import helpers.util as util
 from helpers.RequestBuilder import RequestBuilder
 
@@ -46,10 +46,10 @@ def login(username, password) -> Response:
                 .with_data(json_credentials)
                 .execute_request())
 
-    data.set_value("token", response.headers.get("Authorization"))
+    store.set_value("token", response.headers.get("Authorization"))
 
     return response
 
 
 def isLoggedIn():
-    return data.get_value("token") is not None
+    return store.get_value("token") is not None

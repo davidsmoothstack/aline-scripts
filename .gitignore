@@ -1,4 +1,4 @@
 .*
-**/data.json
+**/store.json
 !.env.example
 __pycache__
