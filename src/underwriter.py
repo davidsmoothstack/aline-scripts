@@ -3,6 +3,7 @@ from random import random
 
 import requests
 from faker import Faker
+from helpers.RequestBuilder import RequestBuilder
 
 import helpers.data as data
 from helpers.decorations import *
@@ -11,8 +12,43 @@ import helpers.util as util
 
 import random
 
-url = "http://localhost:8071"
 fake = Faker()
+base_url = util.base_from_env("DOMAIN", "UNDERWRITER_SERVICE_PORT")
+token = data.get_value("token")
+
+def _fake_applicant():
+    first_name = fake.first_name()
+    last_name = fake.last_name()
+    email = f"{first_name}.{last_name}@example.com"
+    
+    return {
+        "firstName": first_name,
+        "middleName": None,
+        "lastName": last_name,
+        "dateOfBirth": "1990-01-01",
+        "gender": "UNSPECIFIED",
+        "email": email,
+        "phone": util.phone_number(),
+        "socialSecurity": fake.ssn(),
+        "driversLicense": util.drivers_liscense(),
+        "income": random.randrange(5_000, 500_000),
+        "address": fake.street_address(),
+        "city": fake.city(),
+        "state": "TX",
+        "zipcode": 11111,
+        "mailingAddress": fake.street_address(),
+        "mailingCity": fake.city(),
+        "mailingState": "TX",
+        "mailingZipcode": 11111
+    }
+
+def _fake_application(applicatonType):
+    return {
+        "applicationType": applicatonType,
+        "noApplicants": True,
+        "applicantIds": [3],
+        "applicants": None
+    }
 
 
 @print_response
@@ -21,59 +57,20 @@ def create_applicant():
         print("You need to be logged in before you can create an applicant")
         return
 
-    path = "/applicants"
-
-    first_name = fake.first_name()
-    last_name = fake.last_name()
-    email = f"{first_name}.{last_name}@example.com"
-
-    response = requests.request(
-        "POST", 
-        url + path,
-        headers={
-            'Authorization': data.get_value("token"),
-            'Content-Type': 'application/json'
-        },
-        data=json.dumps({
-            "firstName": first_name,
-            "middleName": None,
-            "lastName": last_name,
-            "dateOfBirth": "1990-01-01",
-            "gender": "UNSPECIFIED",
-            "email": email,
-            "phone": util.phone_number(),
-            "socialSecurity": fake.ssn(),
-            "driversLicense": util.drivers_liscense(),
-            "income": random.randrange(5_000, 500_000),
-            "address": fake.street_address(),
-            "city": fake.city(),
-            "state": "TX",
-            "zipcode": 11111,
-            "mailingAddress": fake.street_address(),
-            "mailingCity": fake.city(),
-            "mailingState": "TX",
-            "mailingZipcode": 11111
-        }))
-
-    return response
-
+    return (RequestBuilder()
+                .with_bearer_token(token)
+                .with_default_headers()
+                .with_method("POST")
+                .with_url(base_url + "/applicants")
+                .with_data(_fake_applicant())
+                .execute_request())
 
 @print_response
-def create_application(applicatonType, applicants):
-    path = "/applications"
-
-    response = requests.request(
-        "POST",
-        url + path,
-        headers={
-            'Authorization': data.get_value("token"),
-            'Content-Type': 'application/json'
-        },
-        data=json.dumps({
-            "applicationType": applicatonType,
-            "noApplicants": True,
-            "applicantIds": [3],
-            "applicants": None
-        }))
-
-    return response
+def create_application(applicatonType="CHECKING"):
+    return (RequestBuilder()
+                .with_bearer_token(token)
+                .with_default_headers()
+                .with_method("POST")
+                .with_url(base_url + "/applications")
+                .with_data(_fake_application(applicatonType))
+                .execute_request())
