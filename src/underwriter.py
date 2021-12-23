@@ -12,11 +12,12 @@ fake = Faker()
 base_url = util.base_from_env("DOMAIN", "UNDERWRITER_SERVICE_PORT")
 token = data.get_value("token")
 
+
 def _fake_applicant():
     first_name = fake.first_name()
     last_name = fake.last_name()
     email = f"{first_name}.{last_name}@example.com"
-    
+
     return {
         "firstName": first_name,
         "middleName": None,
@@ -38,6 +39,7 @@ def _fake_applicant():
         "mailingZipcode": 11111
     }
 
+
 def _fake_application(applicatonType):
     return {
         "applicationType": applicatonType,
@@ -46,24 +48,26 @@ def _fake_application(applicatonType):
         "applicants": None
     }
 
+
 def create_applicant():
     if not isLoggedIn():
         print("You need to be logged in before you can create an applicant")
         return
 
     return (RequestBuilder()
-                .with_bearer_token(token)
-                .with_default_headers()
-                .with_method("POST")
-                .with_url(base_url + "/applicants")
-                .with_data(_fake_applicant())
-                .execute_request())
+            .with_bearer_token(token)
+            .with_default_headers()
+            .with_method("POST")
+            .with_url(base_url + "/applicants")
+            .with_data(_fake_applicant())
+            .execute_request())
+
 
 def create_application(applicatonType="CHECKING"):
     return (RequestBuilder()
-                .with_bearer_token(token)
-                .with_default_headers()
-                .with_method("POST")
-                .with_url(base_url + "/applications")
-                .with_data(_fake_application(applicatonType))
-                .execute_request())
+            .with_bearer_token(token)
+            .with_default_headers()
+            .with_method("POST")
+            .with_url(base_url + "/applications")
+            .with_data(_fake_application(applicatonType))
+            .execute_request())

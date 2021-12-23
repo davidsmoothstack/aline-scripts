@@ -19,6 +19,7 @@ def _fake_bank():
         "zipcode": "11111"
     }
 
+
 def _fake_branch(bankId):
     return {
         "name": "branch",
@@ -30,6 +31,7 @@ def _fake_branch(bankId):
         "bankID": bankId
     }
 
+
 def create_bank():
     if not isLoggedIn():
         print("You need to be logged in before you can create a bank")
@@ -38,12 +40,13 @@ def create_bank():
     bank_json = util.to_json(_fake_bank())
 
     return (RequestBuilder()
-                .with_bearer_token(token)
-                .with_default_headers()
-                .with_method("POST")
-                .with_url(base_url + "/banks")
-                .with_data(bank_json)
-                .execute_request())
+            .with_bearer_token(token)
+            .with_default_headers()
+            .with_method("POST")
+            .with_url(base_url + "/banks")
+            .with_data(bank_json)
+            .execute_request())
+
 
 def create_branch(bankId):
     if not isLoggedIn():
@@ -53,9 +56,9 @@ def create_branch(bankId):
     branch_json = util.to_json(_fake_branch(bankId))
 
     return (RequestBuilder()
-                .with_bearer_token(token)
-                .with_default_headers()
-                .with_method("POST")
-                .with_url(base_url + "/branches")
-                .with_data(branch_json)
-                .execute_request())
+            .with_bearer_token(token)
+            .with_default_headers()
+            .with_method("POST")
+            .with_url(base_url + "/branches")
+            .with_data(branch_json)
+            .execute_request())

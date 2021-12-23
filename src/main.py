@@ -1,11 +1,11 @@
 from bank import *
-from user import *
 from underwriter import *
+from user import *
 
 if __name__ == "__main__":
     username = "TheAdmin"
     password = "P@$$word1"
-    
+
     try:
         create_user(username, password)
     except Exception as e:
