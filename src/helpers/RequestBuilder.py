@@ -9,8 +9,8 @@ import helpers.data as data
 class RequestBuilder():
     method: str
     url: str
-    headers: dict[str]
-    data: dict[str]
+    headers: dict
+    data: dict
 
     def __init__(self) -> None:
         self.headers = {}
