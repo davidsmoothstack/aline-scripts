@@ -2,7 +2,6 @@ from faker import Faker
 
 import helpers.data as data
 import helpers.util as util
-from helpers.decorations import *
 from helpers.RequestBuilder import RequestBuilder
 from user import isLoggedIn
 
