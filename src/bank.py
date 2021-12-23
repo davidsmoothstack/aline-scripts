@@ -55,6 +55,7 @@ def create_branch(bankId):
 
     return (RequestBuilder()
                 .with_bearer_token(token)
+                .with_default_headers()
                 .with_method("POST")
                 .with_url(base_url + "/branches")
                 .with_data(branch_json)
