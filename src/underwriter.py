@@ -50,8 +50,6 @@ def _fake_application(applicatonType):
         "applicants": None
     }
 
-
-@print_response
 def create_applicant():
     if not isLoggedIn():
         print("You need to be logged in before you can create an applicant")
@@ -65,7 +63,6 @@ def create_applicant():
                 .with_data(_fake_applicant())
                 .execute_request())
 
-@print_response
 def create_application(applicatonType="CHECKING"):
     return (RequestBuilder()
                 .with_bearer_token(token)
