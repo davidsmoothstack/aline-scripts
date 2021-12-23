@@ -4,8 +4,11 @@ from underwriter import *
 
 
 if __name__ == "__main__":
+    username = "TheAdmin"
+    password = "P@$$word1"
+    
     try:
-        create_user()
+        create_user(username, password)
     except Exception as e:
         print(e)
         print("")

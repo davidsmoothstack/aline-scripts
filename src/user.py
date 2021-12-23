@@ -25,24 +25,22 @@ def _fake_user(username, password, isAdmin):
 def create_user(username, password, isAdmin=True) -> Response:
     json_user = util.to_json(_fake_user(username, password, isAdmin))
     
-    return\
-        (RequestBuilder()
-            .with_default_headers()
-            .with_method("POST")
-            .with_url(base_url + "/users/registration")
-            .with_data(json_user)
-            .execute_request())
+    return (RequestBuilder()
+                .with_default_headers()
+                .with_method("POST")
+                .with_url(base_url + "/users/registration")
+                .with_data(json_user)
+                .execute_request())
 
 def login(username, password) -> Response:
     json_credentials = util.to_json({ "username": username, "password": password})
     
-    return\
-        (RequestBuilder()
-            .with_default_headers()
-            .with_method("POST")
-            .with_url(base_url + "/login")
-            .with_data(json_credentials)
-            .execute_request())
+    return (RequestBuilder()
+                .with_default_headers()
+                .with_method("POST")
+                .with_url(base_url + "/login")
+                .with_data(json_credentials)
+                .execute_request())
 
 def isLoggedIn():
     return data.get_value("token") is not None
