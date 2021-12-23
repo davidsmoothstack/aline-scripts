@@ -1,11 +1,22 @@
 import random
+import json
+import os
 from functional import seq
 
+def to_json(input):
+    return json.dumps(input)
+
+def full_url(base_url, endpoint):
+    f"{base_url}/{endpoint}"
+
+def base_from_env(domain_env, port_env):
+    domain = os.getenv(domain_env)
+    port = os.getenv(port_env)    
+    return f"{domain}:{port}"
 
 def random_ints(length):
     return seq.range(length)\
         .map(lambda _: str(random.randrange(9)))
-
 
 def phone_number():
     def to_phone_number(acc, tup):
@@ -21,7 +32,6 @@ def phone_number():
         .map(str)\
         .enumerate()\
         .reduce(to_phone_number, "")
-
 
 def drivers_liscense():
     return random_ints(12)\

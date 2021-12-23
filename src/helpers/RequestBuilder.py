@@ -1,8 +1,5 @@
 from dataclasses import dataclass
-
 from requests.api import request
-from returns.io import impure_safe
-
 
 @dataclass(init=False)
 class RequestBuilder():
@@ -32,6 +29,30 @@ class RequestBuilder():
         return self
 
     def execute_request(self):
-        result = request(self.method, headers=self.headers, url=self.url, data=self.data)
-        result.raise_for_status()
-        return result
+        response = request(self.method, self.url, headers=self.headers, data=self.data)
+
+        if not response.ok:
+            raise Exception(f"{response.url} failed: {response.text}")
+
+        print(f"{response.url} successful")
+
+        if response.status_code == 201:
+            print(response.json())
+            print("")
+
+        return response
+
+# TODO: Remove
+    # def print_response(response):
+    #     if not response.ok:
+    #         raise Exception(f"{response.url} failed: {response.text}")
+
+    #     print(f"{response.url} successful")
+    #     print("")
+
+    #     if response.status_code == 201:
+    #         print(response.json())
+    #         print("")
+    #         return response.json()
+
+    #     return None
