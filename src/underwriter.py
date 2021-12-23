@@ -1,16 +1,12 @@
-import json
+import random
 from random import random
 
-import requests
 from faker import Faker
-from helpers.RequestBuilder import RequestBuilder
 
 import helpers.data as data
-from helpers.decorations import *
-from user import isLoggedIn
 import helpers.util as util
-
-import random
+from helpers.RequestBuilder import RequestBuilder
+from user import isLoggedIn
 
 fake = Faker()
 base_url = util.base_from_env("DOMAIN", "UNDERWRITER_SERVICE_PORT")
