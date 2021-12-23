@@ -2,7 +2,6 @@ from bank import *
 from user import *
 from underwriter import *
 
-
 if __name__ == "__main__":
     username = "TheAdmin"
     password = "P@$$word1"
@@ -16,7 +15,7 @@ if __name__ == "__main__":
     try:
         login(username, password)
 
-        bank = create_bank()
+        bank = create_bank().json()
         create_branch(bank["id"])
 
         applicant = create_applicant()
