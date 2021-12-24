@@ -3,7 +3,7 @@ from faker import Faker
 import helpers.store as store
 import helpers.util as util
 from helpers.RequestBuilder import RequestBuilder
-from user import isLoggedIn
+from user import is_logged_in
 
 fake = Faker()
 base_url = util.base_from_env("DOMAIN", "BANK_SERVICE_PORT")
@@ -33,7 +33,7 @@ def _fake_branch(bankId):
 
 
 def create_bank():
-    if not isLoggedIn():
+    if not is_logged_in():
         print("You need to be logged in before you can create a bank")
         return
 
@@ -49,7 +49,7 @@ def create_bank():
 
 
 def create_branch(bankId):
-    if not isLoggedIn():
+    if not is_logged_in():
         print("You need to be logged in before you can create a branch")
         return
 

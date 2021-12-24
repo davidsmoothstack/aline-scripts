@@ -51,5 +51,5 @@ def login(username, password) -> Response:
     return response
 
 
-def isLoggedIn():
+def is_logged_in():
     return store.get_value("token") is not None
