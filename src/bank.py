@@ -5,28 +5,28 @@ import helpers.util as util
 from helpers.RequestBuilder import RequestBuilder
 from user import is_logged_in
 
-fake = Faker()
+__fake = Faker()
 base_url = util.base_from_env("DOMAIN", "BANK_SERVICE_PORT")
 
 
-def _fake_bank():
+def __fake_bank():
     return {
-        "routingNumber": fake.aba(),
-        "address": fake.street_address(),
-        "city": fake.city(),
-        "state": fake.state(),
-        "zipcode": fake.numerify("#####")
+        "routingNumber": __fake.aba(),
+        "address": __fake.street_address(),
+        "city": __fake.city(),
+        "state": __fake.state(),
+        "zipcode": __fake.numerify("#####")
     }
 
 
-def _fake_branch(bankId):
+def __fake_branch(bankId):
     return {
-        "name": fake.name(),
-        "phone": fake.numerify("(###)-###-####"),
-        "address": fake.street_address(),
-        "city": fake.city(),
-        "state": fake.state(),
-        "zipcode": fake.numerify("#####"),
+        "name": __fake.name(),
+        "phone": __fake.numerify("(###)-###-####"),
+        "address": __fake.street_address(),
+        "city": __fake.city(),
+        "state": __fake.state(),
+        "zipcode": __fake.numerify("#####"),
         "bankID": bankId
     }
 
@@ -36,7 +36,7 @@ def create_bank():
         print("You need to be logged in before you can create a bank")
         return
 
-    bank_json = util.to_json(_fake_bank())
+    bank_json = util.to_json(__fake_bank())
 
     return (RequestBuilder()
             .with_bearer_token(store.get_token())
@@ -52,7 +52,7 @@ def create_branch(bankId):
         print("You need to be logged in before you can create a branch")
         return
 
-    branch_json = util.to_json(_fake_branch(bankId))
+    branch_json = util.to_json(__fake_branch(bankId))
 
     return (RequestBuilder()
             .with_bearer_token(store.get_token())
