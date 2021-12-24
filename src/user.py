@@ -46,10 +46,10 @@ def login(username, password) -> Response:
                 .with_data(json_credentials)
                 .execute_request())
 
-    store.set_value("token", response.headers.get("Authorization"))
+    store.set_token(response.headers.get("Authorization"))
 
     return response
 
 
 def is_logged_in():
-    return store.get_value("token") is not None
+    return store.get_token() is not None

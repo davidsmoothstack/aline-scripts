@@ -2,6 +2,7 @@ import json
 from os.path import exists
 
 json_file = "src/helpers/store.json"
+token_key = "token"
 
 
 def _read_file(json_file):
@@ -33,3 +34,11 @@ def get_value(key):
         return data[key]
     except:
         return None
+
+
+def get_token():
+    return get_value(token_key)
+
+
+def set_token(val):
+    set_value(token_key, val)
