@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 
 from requests.api import request
-from requests.models import HTTPError
-
-import helpers.store as store
 
 
 @dataclass()

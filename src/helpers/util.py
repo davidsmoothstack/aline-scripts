@@ -1,8 +1,5 @@
 import json
 import os
-import random
-
-from functional import seq
 
 
 def get_env(env):
