@@ -15,7 +15,6 @@ def _get_env(env):
 
 
 def to_json(input):
-    # TODO: Turn into decorator
     return json.dumps(input)
 
 
