@@ -15,19 +15,19 @@ def _fake_bank():
         "routingNumber": fake.aba(),
         "address": fake.street_address(),
         "city": fake.city(),
-        "state": "TX",
-        "zipcode": "11111"
+        "state": fake.state(),
+        "zipcode": fake.numerify("#####")
     }
 
 
 def _fake_branch(bankId):
     return {
-        "name": "branch",
-        "phone": fake.phone_number(),
+        "name": fake.name(),
+        "phone": fake.numerify("(###)-###-####"),
         "address": fake.street_address(),
         "city": fake.city(),
-        "state": "TX",
-        "zipcode": "11111",
+        "state": fake.state(),
+        "zipcode": fake.numerify("#####"),
         "bankID": bankId
     }
 

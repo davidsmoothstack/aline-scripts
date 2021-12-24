@@ -25,18 +25,18 @@ def _fake_applicant():
         "dateOfBirth": "1990-01-01",
         "gender": "UNSPECIFIED",
         "email": email,
-        "phone": util.phone_number(),
+        "phone": fake.numerify("(###)-###-####"),
         "socialSecurity": fake.ssn(),
-        "driversLicense": util.drivers_liscense(),
-        "income": random.randrange(5_000, 500_000),
+        "driversLicense": fake.numerify("#########"),
+        "income": fake.numerify("#%#######"),
         "address": fake.street_address(),
         "city": fake.city(),
-        "state": "TX",
-        "zipcode": 11111,
+        "state": fake.state(),
+        "zipcode": fake.numerify("#####"),
         "mailingAddress": fake.street_address(),
         "mailingCity": fake.city(),
-        "mailingState": "TX",
-        "mailingZipcode": 11111
+        "mailingState": fake.state(),
+        "mailingZipcode": fake.numerify("#####")
     }
 
 
