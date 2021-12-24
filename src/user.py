@@ -18,7 +18,7 @@ def __fake_user(username, password, isAdmin):
         "firstName": __fake.first_name(),
         "lastName": __fake.last_name(),
         "email": __fake.email(),
-        "phone": __fake.numerify('(###)-###-####'),
+        "phone": __fake.numerify("(###)-###-####"),
         "membershipId": 0,  # TODO: Look into
         "lastFourOfSSN": 1111
     }
