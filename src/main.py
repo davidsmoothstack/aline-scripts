@@ -28,7 +28,9 @@ if __name__ == "__main__":
         bank = create_bank().json()
         create_branch(bank["id"])
 
-        applicant = create_applicant()
+        create_applicant()
         create_application()
-    except Exception as e:
+    except HTTPError as e:
         print(f"{e}\n{e.response.text}")
+    except Exception as e:
+        print(e)
