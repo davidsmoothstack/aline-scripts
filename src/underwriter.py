@@ -1,6 +1,3 @@
-import random
-from random import random
-
 from faker import Faker
 
 import helpers.store as store
