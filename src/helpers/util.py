@@ -15,10 +15,6 @@ def to_json(input):
     return json.dumps(input)
 
 
-def full_url(base_url, endpoint):
-    f"{base_url}/{endpoint}"
-
-
 def base_from_env(domain_env, port_env):
     domain = get_env(domain_env)
     port = get_env(port_env)
