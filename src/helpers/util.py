@@ -26,7 +26,7 @@ def is_logged_in():
     return store.get_token() is not None
 
 
-def login_guard(func):
+def auth_guard(func):
     def decorator(*args):
         if is_logged_in() == False:
             raise Exception(

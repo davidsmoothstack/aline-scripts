@@ -39,7 +39,7 @@ def __fake_application():
     }
 
 
-@util.login_guard
+@util.auth_guard
 def create_applicant():
     json_applicant = util.to_json(__fake_applicant())
 

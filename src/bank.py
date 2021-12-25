@@ -30,7 +30,7 @@ def __fake_branch(bankId):
     }
 
 
-@util.login_guard
+@util.auth_guard
 def create_bank():
     bank_json = util.to_json(__fake_bank())
 
@@ -43,7 +43,7 @@ def create_bank():
             .execute_request())
 
 
-@util.login_guard
+@util.auth_guard
 def create_branch(bankId):
     branch_json = util.to_json(__fake_branch(bankId))
 
