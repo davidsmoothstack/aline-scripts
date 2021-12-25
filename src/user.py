@@ -49,7 +49,3 @@ def login(username, password) -> Response:
     store.set_token(response.headers.get("Authorization"))
 
     return response
-
-
-def is_logged_in():
-    return store.get_token() is not None

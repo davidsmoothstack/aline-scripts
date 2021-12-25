@@ -3,7 +3,6 @@ from faker import Faker
 import helpers.store as store
 import helpers.util as util
 from helpers.RequestBuilder import RequestBuilder
-from user import is_logged_in
 
 __fake = Faker()
 base_url = util.base_from_env("DOMAIN", "BANK_SERVICE_PORT")
@@ -31,11 +30,8 @@ def __fake_branch(bankId):
     }
 
 
+@util.login_guard
 def create_bank():
-    if not is_logged_in():
-        print("You need to be logged in before you can create a bank")
-        return
-
     bank_json = util.to_json(__fake_bank())
 
     return (RequestBuilder()
@@ -47,11 +43,8 @@ def create_bank():
             .execute_request())
 
 
+@util.login_guard
 def create_branch(bankId):
-    if not is_logged_in():
-        print("You need to be logged in before you can create a branch")
-        return
-
     branch_json = util.to_json(__fake_branch(bankId))
 
     return (RequestBuilder()

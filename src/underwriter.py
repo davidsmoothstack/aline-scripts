@@ -3,7 +3,6 @@ from faker import Faker
 import helpers.store as store
 import helpers.util as util
 from helpers.RequestBuilder import RequestBuilder
-from user import is_logged_in
 
 __fake = Faker()
 base_url = util.base_from_env("DOMAIN", "UNDERWRITER_SERVICE_PORT")
@@ -40,11 +39,8 @@ def __fake_application():
     }
 
 
+@util.login_guard
 def create_applicant():
-    if not is_logged_in():
-        print("You need to be logged in before you can create an applicant")
-        return
-
     json_applicant = util.to_json(__fake_applicant())
 
     return (RequestBuilder()
