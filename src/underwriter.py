@@ -1,79 +1,65 @@
-import json
-from random import random
-
-import requests
 from faker import Faker
 
-import helpers.data as data
-from helpers.decorations import *
-from user import isLoggedIn
+import helpers.store as store
 import helpers.util as util
+from helpers.RequestBuilder import RequestBuilder
 
-import random
-
-url = "http://localhost:8071"
-fake = Faker()
+__fake = Faker()
+base_url = util.base_from_env("DOMAIN", "UNDERWRITER_SERVICE_PORT")
 
 
-@print_response
+def __fake_applicant():
+    return {
+        "address": __fake.street_address(),
+        "city": __fake.city(),
+        "dateOfBirth": __fake.numerify("19##-0%-1#"),
+        "driversLicense": __fake.numerify("#########"),
+        "email": __fake.email(),
+        "firstName": __fake.first_name(),
+        "gender": __fake.random_element(elements=("MALE", "FEMALE", "OTHER", "UNSPECIFIED")),
+        "income": __fake.numerify("#%#######"),
+        "lastName": __fake.last_name(),
+        "mailingAddress": __fake.street_address(),
+        "mailingCity": __fake.city(),
+        "mailingState": __fake.state(),
+        "mailingZipcode": __fake.zipcode(),
+        "middleName": __fake.first_name(),
+        "phone": __fake.numerify("(###)-###-####"),
+        "socialSecurity": __fake.numerify("###-##-####"),
+        "state": __fake.state(),
+        "zipcode": __fake.zipcode()
+    }
+
+
+def __fake_application_request(applicants):
+    return {
+        "applicationType": "CREDIT_CARD",
+        "noApplicants": False,
+        "applicants": applicants
+    }
+
+
+@util.auth_guard
 def create_applicant():
-    if not isLoggedIn():
-        print("You need to be logged in before you can create an applicant")
-        return
+    json_applicant = util.to_json(__fake_applicant())
 
-    path = "/applicants"
-
-    first_name = fake.first_name()
-    last_name = fake.last_name()
-    email = f"{first_name}.{last_name}@example.com"
-
-    response = requests.request(
-        "POST", 
-        url + path,
-        headers={
-            'Authorization': data.get_value("token"),
-            'Content-Type': 'application/json'
-        },
-        data=json.dumps({
-            "firstName": first_name,
-            "middleName": None,
-            "lastName": last_name,
-            "dateOfBirth": "1990-01-01",
-            "gender": "UNSPECIFIED",
-            "email": email,
-            "phone": util.phone_number(),
-            "socialSecurity": fake.ssn(),
-            "driversLicense": util.drivers_liscense(),
-            "income": random.randrange(5_000, 500_000),
-            "address": fake.street_address(),
-            "city": fake.city(),
-            "state": "TX",
-            "zipcode": 11111,
-            "mailingAddress": fake.street_address(),
-            "mailingCity": fake.city(),
-            "mailingState": "TX",
-            "mailingZipcode": 11111
-        }))
-
-    return response
+    return (RequestBuilder()
+            .with_bearer_token(store.get_token())
+            .with_default_headers()
+            .with_method("POST")
+            .with_url(base_url + "/applicants")
+            .with_data(json_applicant)
+            .execute_request())
 
 
-@print_response
-def create_application(applicatonType, applicants):
-    path = "/applications"
+def create_application():
+    applicants = [__fake_applicant()]
+    json_application = util.to_json(__fake_application_request(applicants))
 
-    response = requests.request(
-        "POST",
-        url + path,
-        headers={
-            'Authorization': data.get_value("token"),
-            'Content-Type': 'application/json'
-        },
-        data=json.dumps({
-            "applicationType": applicatonType,
-            "noApplicants": True,
-            "applicantIds": [3],
-            "applicants": None
-        }))
-
-    return response
+    return (RequestBuilder()
+            .with_bearer_token(store.get_token())
+            .with_default_headers()
+            .with_method("POST")
+            .with_url(base_url + "/applications")
+            .with_data(json_application)
+            .execute_request())

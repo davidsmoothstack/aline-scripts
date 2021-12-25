@@ -1,25 +1,36 @@
-from bank import *
-from user import *
-from underwriter import *
+from requests.models import HTTPError
+from bank import create_bank, create_branch
+from helpers.util import get_env
+from underwriter import create_applicant, create_application
+from user import create_user, login
+
+
+def authenticate(username, password):
+    try:
+        create_user(username, password)
+    except HTTPError as e:
+        if e.response.status_code == 409:
+            print("User already exists")
+            print("")
+        else:
+            raise e
+    finally:
+        login(username, password)
 
 
 if __name__ == "__main__":
-    username = "PeterParker"
-    password = "P@$$word1"
-
     try:
-        create_user(username, password, True)
-    except Exception as e:
-        print(e)
-        print("")
+        username = get_env("ADMIN_USERNAME")
+        password = get_env("ADMIN_PASSWORD")
 
-    try:
-        login(username, password)
+        authenticate(username, password)
 
-        bank = create_bank()
+        bank = create_bank().json()
         create_branch(bank["id"])
 
-        applicant = create_applicant()
-        create_application("CHECKING", [applicant])
+        create_applicant()
+        create_application()
+    except HTTPError as e:
+        print(f"{e}\n{e.response.text}")
     except Exception as e:
         print(e)
