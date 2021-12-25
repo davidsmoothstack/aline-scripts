@@ -31,7 +31,7 @@ def __fake_applicant():
     }
 
 
-def __fake_application():
+def __fake_application_request():
     return {
         "applicationType": __fake.random_element(elements=("CHECKING", "SAVINGS", "CREDIT_CARD")),
         "noApplicants": False,
@@ -54,7 +54,7 @@ def create_applicant():
 
 def create_application():
     # TODO: Check if logged in
-    json_application = util.to_json(__fake_application())
+    json_application = util.to_json(__fake_application_request())
 
     return (RequestBuilder()
             .with_bearer_token(store.get_token())
