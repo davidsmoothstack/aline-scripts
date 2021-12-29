@@ -19,7 +19,7 @@ def __fake_user(username, password, isAdmin, membershipId=None, lastFourSSN=None
         "lastName": __fake.last_name(),
         "email": __fake.email(),
         "phone": __fake.numerify("(###)-###-####"),
-        "membershipId": None if isAdmin else membershipId,  # TODO: Look into
+        "membershipId": None if isAdmin else membershipId,
         "lastFourOfSSN": None if isAdmin else lastFourSSN
     }
 
