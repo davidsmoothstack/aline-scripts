@@ -8,7 +8,7 @@ __fake = Faker()
 base_url = util.base_from_env("DOMAIN", "UNDERWRITER_SERVICE_PORT")
 
 
-def __fake_applicant():
+def fake_applicant():
     return {
         "address": __fake.street_address(),
         "city": __fake.city(),
