@@ -40,8 +40,8 @@ def __fake_application_request(applicantIds):
 
 
 @util.auth_guard
-def create_applicant():
-    json_applicant = util.to_json(__fake_applicant())
+def create_applicant(applicant):
+    json_applicant = util.to_json(applicant)
 
     return (RequestBuilder()
             .with_bearer_token(store.get_token())
