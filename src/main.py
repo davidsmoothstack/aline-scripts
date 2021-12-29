@@ -1,6 +1,8 @@
 from requests.models import HTTPError
+
 from bank import create_bank, create_branch
 from helpers.util import get_env
+from transaction import create_transaction
 from underwriter import create_applicant, create_application
 from user import create_user, login
 
@@ -30,6 +32,8 @@ if __name__ == "__main__":
 
         create_applicant()
         create_application()
+
+        create_transaction()
     except HTTPError as e:
         print(f"{e}\n{e.response.text}")
     except Exception as e:
