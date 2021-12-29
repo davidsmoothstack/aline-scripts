@@ -31,11 +31,11 @@ def __fake_applicant():
     }
 
 
-def __fake_application_request(applicants):
+def __fake_application_request(applicantIds):
     return {
         "applicationType": "CREDIT_CARD",
-        "noApplicants": False,
-        "applicants": applicants
+        "noApplicants": True,
+        "applicantIds": applicantIds
     }
 
 
@@ -52,9 +52,9 @@ def create_applicant():
             .execute_request())
 
 
-def create_application():
-    applicants = [__fake_applicant()]
-    json_application = util.to_json(__fake_application_request(applicants))
+def create_application(applicantId):
+    applicantIds = [applicantId]
+    json_application = util.to_json(__fake_application_request(applicantIds))
 
     return (RequestBuilder()
             .with_bearer_token(store.get_token())

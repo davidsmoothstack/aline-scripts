@@ -9,7 +9,7 @@ from user import create_user, login
 
 def authenticate(username, password):
     try:
-        create_user(username, password)
+        create_user(username, password, True)
     except HTTPError as e:
         if e.response.status_code == 409:
             print("User already exists")
@@ -18,6 +18,10 @@ def authenticate(username, password):
             raise e
     finally:
         login(username, password)
+
+
+def random_userpass():
+    return ("sdfsdf", "sdrfsdf")
 
 
 if __name__ == "__main__":
@@ -30,8 +34,13 @@ if __name__ == "__main__":
         bank = create_bank().json()
         create_branch(bank["id"])
 
-        create_applicant()
-        create_application()
+        applicant = create_applicant().json()
+        application_result = create_application(applicant["id"]).json()
+
+        (user, _) = random_userpass()
+        membership_id = application_result["createdMembers"][0]["membershipId"]
+        account = create_user(
+            user, password, isAdmin=False, membershipId=membership_id, lastFourSSN=1111)
 
         create_transaction()
     except HTTPError as e:
