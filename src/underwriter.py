@@ -33,7 +33,7 @@ def fake_applicant():
 
 def __fake_application_request(applicantIds):
     return {
-        "applicationType": "CREDIT_CARD",
+        "applicationType": "CHECKING_AND_SAVINGS",
         "noApplicants": True,
         "applicantIds": applicantIds
     }

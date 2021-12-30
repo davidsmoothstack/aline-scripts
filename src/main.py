@@ -5,6 +5,9 @@ from helpers.util import get_env
 from transaction import create_transaction
 from underwriter import create_applicant, create_application, fake_applicant
 from user import create_user, login
+from faker import Faker
+
+fake = Faker()
 
 
 def authenticate(username, password):
@@ -21,7 +24,8 @@ def authenticate(username, password):
 
 
 def random_userpass():
-    return ("sdfsdf", "sdrfsdf")
+    username = fake.user_name() + str(fake.random_digit())
+    return (username, "P@ssword1")
 
 
 if __name__ == "__main__":
@@ -43,7 +47,7 @@ if __name__ == "__main__":
         account = create_user(
             user, password, isAdmin=False, membershipId=membership_id, lastFourSSN=last_ssn)
 
-        create_transaction()
+        create_transaction("0011014703")
     except HTTPError as e:
         print(f"{e}\n{e.response.text}")
     except Exception as e:

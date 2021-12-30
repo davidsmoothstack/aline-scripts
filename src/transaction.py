@@ -19,9 +19,9 @@ def __fake_transaction(accountNumber):
     }
 
 
-def create_transaction():
+def create_transaction(accountNumber):
     # TODO: Remove magic number
-    transaction_json = util.to_json(__fake_transaction(33880053))
+    transaction_json = util.to_json(__fake_transaction(accountNumber))
 
     return (RequestBuilder()
             .with_default_headers()
