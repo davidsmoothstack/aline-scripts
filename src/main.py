@@ -30,9 +30,9 @@ def random_userpass():
 
 if __name__ == "__main__":
     try:
-        username = get_env("ADMIN_USERNAME")
-        password = get_env("ADMIN_PASSWORD")
-        authenticate(username, password)
+        admin_username = get_env("ADMIN_USERNAME")
+        admin_password = get_env("ADMIN_PASSWORD")
+        authenticate(admin_username, admin_password)
 
         bank = create_bank().json()
         create_branch(bank["id"])
@@ -41,24 +41,14 @@ if __name__ == "__main__":
         applicant = create_applicant(fake_app).json()
         application_result = create_application(applicant["id"]).json()
 
-        (user, _) = random_userpass()
+        (random_username, random_password) = random_userpass()
         membership_id = application_result["createdMembers"][0]["membershipId"]
         last_ssn = fake_app["socialSecurity"].rsplit("-")[2]
         account = create_user(
-            user, password, isAdmin=False, membershipId=membership_id, lastFourSSN=last_ssn)
+            random_username, random_password, isAdmin=False, membershipId=membership_id, lastFourSSN=last_ssn)
 
-        for _ in range(100):
-            try:
-                # prompt user for account id
-                create_transaction("0011015103")
-            except Exception as e:
-                print(e)
-
-                if e.response.status_code == 404:
-                    break
-
-                continue
-
+        account_number = input("Account number to create a transaction with: ")
+        create_transaction(account_number)
     except HTTPError as e:
         print(f"{e}\n{e.response.text}")
     except Exception as e:
