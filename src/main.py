@@ -47,7 +47,18 @@ if __name__ == "__main__":
         account = create_user(
             user, password, isAdmin=False, membershipId=membership_id, lastFourSSN=last_ssn)
 
-        create_transaction("0011014703")
+        for _ in range(100):
+            try:
+                # prompt user for account id
+                create_transaction("0011015103")
+            except Exception as e:
+                print(e)
+
+                if e.response.status_code == 404:
+                    break
+
+                continue
+
     except HTTPError as e:
         print(f"{e}\n{e.response.text}")
     except Exception as e:

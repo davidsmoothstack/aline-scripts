@@ -9,11 +9,11 @@ base_url = util.base_from_env("DOMAIN", "TRANSACTION_SERVICE_PORT")
 
 def __fake_transaction(accountNumber):
     return {
-        "amount": __fake.numerify("#####"),
+        "amount": __fake.numerify("##"),
         "date": __fake.numerify("201#-0%-1#"),
         "initialBalance": __fake.numerify("####"),
         "method": __fake.random_element(elements=("ACH", "ATM", "CREDIT_CARD", "DEBIT_CARD", "APP")),
-        "merchantCode": "1111",
+        "merchantCode": "None",
         "type": __fake.random_element(elements=("WITHDRAWAL", "TRANSFER_OUT", "TRANSFER_IN", "DEPOSIT")),
         "accountNumber": accountNumber
     }
