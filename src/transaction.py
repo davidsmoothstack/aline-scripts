@@ -20,7 +20,6 @@ def __fake_transaction(accountNumber):
 
 
 def create_transaction(accountNumber):
-    # TODO: Remove magic number
     transaction_json = util.to_json(__fake_transaction(accountNumber))
 
     return (RequestBuilder()
