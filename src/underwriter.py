@@ -8,7 +8,7 @@ __fake = Faker()
 base_url = util.base_from_env("DOMAIN", "UNDERWRITER_SERVICE_PORT")
 
 
-def __fake_applicant():
+def fake_applicant():
     return {
         "address": __fake.street_address(),
         "city": __fake.city(),
@@ -31,17 +31,17 @@ def __fake_applicant():
     }
 
 
-def __fake_application_request(applicants):
+def __fake_application_request(applicantIds):
     return {
-        "applicationType": "CREDIT_CARD",
-        "noApplicants": False,
-        "applicants": applicants
+        "applicationType": "CHECKING_AND_SAVINGS",
+        "noApplicants": True,
+        "applicantIds": applicantIds
     }
 
 
 @util.auth_guard
-def create_applicant():
-    json_applicant = util.to_json(__fake_applicant())
+def create_applicant(applicant):
+    json_applicant = util.to_json(applicant)
 
     return (RequestBuilder()
             .with_bearer_token(store.get_token())
@@ -52,9 +52,9 @@ def create_applicant():
             .execute_request())
 
 
-def create_application():
-    applicants = [__fake_applicant()]
-    json_application = util.to_json(__fake_application_request(applicants))
+def create_application(applicantId):
+    applicantIds = [applicantId]
+    json_application = util.to_json(__fake_application_request(applicantIds))
 
     return (RequestBuilder()
             .with_bearer_token(store.get_token())
