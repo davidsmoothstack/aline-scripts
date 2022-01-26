@@ -1,4 +1,14 @@
-import helpers.store
+import helpers.store as store
+
+token_key = "token"
+
+
+def get_token():
+    return store.get_value(token_key)
+
+
+def set_token(val):
+    store.set_value(token_key, val)
 
 
 def is_logged_in():
