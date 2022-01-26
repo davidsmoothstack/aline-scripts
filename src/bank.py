@@ -2,6 +2,7 @@ from faker import Faker
 
 import helpers.store as store
 import helpers.util as util
+from helpers.authentication import auth_guard
 from helpers.RequestBuilder import RequestBuilder
 
 __fake = Faker()
@@ -30,7 +31,7 @@ def __fake_branch(bankId):
     }
 
 
-@util.auth_guard
+@auth_guard
 def create_bank():
     bank_json = util.to_json(__fake_bank())
 
@@ -43,7 +44,7 @@ def create_bank():
             .execute_request())
 
 
-@util.auth_guard
+@auth_guard
 def create_branch(bankId):
     branch_json = util.to_json(__fake_branch(bankId))
 

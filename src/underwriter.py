@@ -2,6 +2,7 @@ from faker import Faker
 
 import helpers.store as store
 import helpers.util as util
+from helpers.authentication import auth_guard
 from helpers.RequestBuilder import RequestBuilder
 
 __fake = Faker()
@@ -39,7 +40,7 @@ def __fake_application_request(applicantIds):
     }
 
 
-@util.auth_guard
+@auth_guard
 def create_applicant(applicant):
     json_applicant = util.to_json(applicant)
 
