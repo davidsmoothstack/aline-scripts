@@ -28,6 +28,15 @@ def random_userpass():
     return (username, "P@ssword1")
 
 
+def last_digits(ssn):
+    """Gets the last four digits of a SSN"""
+    return ssn.rsplit("-")[2]
+
+
+def get_membership_id(application_result):
+    return application_result["createdMembers"][0]["membershipId"]
+
+
 if __name__ == "__main__":
     try:
         admin_username = get_env("ADMIN_USERNAME")
@@ -42,10 +51,14 @@ if __name__ == "__main__":
         application_result = create_application(applicant["id"]).json()
 
         (random_username, random_password) = random_userpass()
-        membership_id = application_result["createdMembers"][0]["membershipId"]
-        last_ssn = fake_app["socialSecurity"].rsplit("-")[2]
+        membership_id = get_membership_id(application_result)
+        ssn_last = last_digits(fake_app["socialSecurity"])
         account = create_user(
-            random_username, random_password, isAdmin=False, membershipId=membership_id, lastFourSSN=last_ssn)
+            random_username,
+            random_password,
+            isAdmin=False,
+            membershipId=membership_id,
+            lastFourSSN=ssn_last)
 
         account_number = input("Account number to create a transaction with: ")
         create_transaction(account_number)
