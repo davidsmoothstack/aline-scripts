@@ -12,7 +12,7 @@ def set_token(val):
 
 
 def is_logged_in():
-    return store.get_token() is not None
+    return get_token() is not None
 
 
 def auth_guard(func):

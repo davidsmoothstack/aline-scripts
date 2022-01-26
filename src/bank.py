@@ -1,8 +1,8 @@
 from faker import Faker
 
+import helpers.authentication as auth
 import helpers.store as store
 import helpers.util as util
-from helpers.authentication import auth_guard
 from helpers.RequestBuilder import RequestBuilder
 
 __fake = Faker()
@@ -31,12 +31,12 @@ def __fake_branch(bankId):
     }
 
 
-@auth_guard
+@auth.auth_guard
 def create_bank():
     bank_json = util.to_json(__fake_bank())
 
     return (RequestBuilder()
-            .with_bearer_token(store.get_token())
+            .with_bearer_token(auth.get_token())
             .with_default_headers()
             .with_method("POST")
             .with_url(base_url + "/banks")
@@ -44,12 +44,12 @@ def create_bank():
             .execute_request())
 
 
-@auth_guard
+@auth.auth_guard
 def create_branch(bankId):
     branch_json = util.to_json(__fake_branch(bankId))
 
     return (RequestBuilder()
-            .with_bearer_token(store.get_token())
+            .with_bearer_token(auth.get_token())
             .with_default_headers()
             .with_method("POST")
             .with_url(base_url + "/branches")
