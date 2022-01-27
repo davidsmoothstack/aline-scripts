@@ -1,6 +1,6 @@
 import json
 import os
-import helpers.store as store
+from requests.models import HTTPError
 
 
 def get_env(env):
@@ -23,13 +23,20 @@ def base_from_env(domain_env, port_env):
 
 
 def repeat(prompt, fn):
+    transient_failures = 0
+    transient_falure_threshold = 5
     count = int(input(prompt))
     results = []
 
-    for _ in range(count):
+    for i in range(count):
         try:
             results.append(fn())
-        except:
-            print("Error processing results")
+            transient_failures = 0
+        except HTTPError as e:
+            if transient_failures >= transient_falure_threshold:
+                raise e
+
+            transient_failures += 1
+            i -= 1
 
     return results
