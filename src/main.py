@@ -31,6 +31,7 @@ def random_userpass():
 
 
 def user_generator():
+    """Creates a fake appliation then uses the application to create a user"""
     fake_app = underwriter.create_applicant(
         underwriter.fake_applicant()).json()
 
