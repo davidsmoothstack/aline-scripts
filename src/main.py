@@ -1,3 +1,4 @@
+import random
 from faker import Faker
 from requests.models import HTTPError
 
@@ -8,20 +9,6 @@ import user
 from helpers.util import get_env, repeat
 
 fake = Faker()
-
-
-def random_userpass():
-    username = fake.user_name() + str(fake.random_digit())
-    return (username, "P@ssword1")
-
-
-def last_digits(ssn):
-    """Gets the last four digits of a SSN"""
-    return ssn.rsplit("-")[2]
-
-
-def get_membership_id(application_result):
-    return application_result["createdMembers"][0]["membershipId"]
 
 
 def authenticate(username, password):
@@ -38,6 +25,11 @@ def authenticate(username, password):
         user.login(username, password)
 
 
+def random_userpass():
+    username = fake.user_name() + str(fake.random_digit())
+    return (username, "P@ssword1")
+
+
 def user_generator():
     fake_app = underwriter.create_applicant(
         underwriter.fake_applicant()).json()
@@ -45,24 +37,30 @@ def user_generator():
     application_result = underwriter.create_application(fake_app["id"]).json()
 
     (random_username, random_password) = random_userpass()
-    membership_id = get_membership_id(application_result)
-    ssn_last = last_digits(fake_app["socialSecurity"])
+    membership_id = application_result["createdMembers"][0]["membershipId"]
+    ssn_last = fake_app["socialSecurity"].rsplit("-")[2]
+
     account = user.create_user(
         random_username,
         random_password,
         isAdmin=False,
         membershipId=membership_id,
-        lastFourSSN=ssn_last)
+        lastFourSSN=ssn_last).json()
 
-    return account
-
-
-def bank_generator():
-    pass
+    return (account, application_result)
 
 
 def branch_generator(banks):
-    pass
+    random_bank = random.choice(banks)
+    return bank.create_branch(random_bank["id"]).json()
+
+
+def transaction_generator(application_results):
+    random_application = random.choice(application_results)
+    random_account_number = random.choice(
+        random_application["createdAccounts"])["accountNumber"]
+
+    return transaction.create_transaction(random_account_number).json()
 
 
 if __name__ == "__main__":
@@ -75,14 +73,17 @@ if __name__ == "__main__":
                        lambda: bank.create_bank().json())
 
         branches = repeat("How many branches should be created?",
-                          lambda: bank.create_branch(banks[0]["id"]).json())
+                          lambda: branch_generator(banks))
 
-        users = repeat("How many users should be created?",
-                       lambda: user_generator())
+        user_application_result_pairs = repeat("How many users should be created?",
+                                               lambda: user_generator())
 
-        account_number = input("Account number to create a transaction with: ")
+        application_results = list(
+            map(lambda pair: pair[1],
+                user_application_result_pairs))
 
-        transaction.create_transaction(account_number)
+        account_number = repeat("How many transactions should be created?",
+                                lambda: transaction_generator(application_results))
     except HTTPError as e:
         print(f"{e}\n{e.response.text}")
     except Exception as e:
