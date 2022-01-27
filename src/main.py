@@ -9,7 +9,7 @@ import logconfig
 import transaction
 import underwriter
 import user
-from helpers.util import get_env, repeat
+from helpers.util import get_env, repeat_prompt
 
 fake = Faker()
 
@@ -72,21 +72,21 @@ if __name__ == "__main__":
         admin_password = get_env("ADMIN_PASSWORD")
         authenticate(admin_username, admin_password)
 
-        banks = repeat("How many banks should be created?",
-                       lambda: bank.create_bank().json())
+        banks = repeat_prompt("How many banks should be created?",
+                              lambda: bank.create_bank().json())
 
-        branches = repeat("How many branches should be created?",
-                          lambda: branch_generator(banks))
+        branches = repeat_prompt("How many branches should be created?",
+                                 lambda: branch_generator(banks))
 
-        user_application_result_pairs = repeat("How many users should be created?",
-                                               lambda: user_generator())
+        user_application_result_pairs = repeat_prompt("How many users should be created?",
+                                                      lambda: user_generator())
 
         application_results = list(
             map(lambda pair: pair[1],
                 user_application_result_pairs))
 
-        account_number = repeat("How many transactions should be created?",
-                                lambda: transaction_generator(application_results))
+        account_number = repeat_prompt("How many transactions should be created?",
+                                       lambda: transaction_generator(application_results))
     except HTTPError as e:
         logging.error(f"{e}\n{e.response.text}")
         logging.exception("")

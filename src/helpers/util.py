@@ -23,7 +23,7 @@ def base_from_env(domain_env, port_env):
     return f"{domain}:{port}"
 
 
-def repeat(prompt, fn):
+def repeat_prompt(prompt, fn):
     transient_failures = 0
     transient_falure_threshold = 5
     count = int(input(prompt))
