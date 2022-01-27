@@ -1,3 +1,4 @@
+import logging
 import json
 import os
 from requests.models import HTTPError
@@ -34,8 +35,10 @@ def repeat(prompt, fn):
             transient_failures = 0
         except HTTPError as e:
             if transient_failures >= transient_falure_threshold:
+                logging.error("Too many transient errors. Exiting repeat loop")
                 raise e
 
+            logging.info("Transient error. Retrying request")
             transient_failures += 1
             count += 1
 

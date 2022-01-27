@@ -1,8 +1,11 @@
+import logging
 import random
+
 from faker import Faker
 from requests.models import HTTPError
 
 import bank
+import logconfig
 import transaction
 import underwriter
 import user
@@ -17,8 +20,7 @@ def authenticate(username, password):
         user.create_user(username, password, isAdmin=True)
     except HTTPError as e:
         if e.response.status_code == 409:
-            print("User already exists")
-            print("")
+            logging.info("User already exists")
         else:
             raise e
     finally:
@@ -86,6 +88,7 @@ if __name__ == "__main__":
         account_number = repeat("How many transactions should be created?",
                                 lambda: transaction_generator(application_results))
     except HTTPError as e:
-        print(f"{e}\n{e.response.text}")
+        logging.error(f"{e}\n{e.response.text}")
+        logging.exception("")
     except Exception as e:
-        print(e)
+        logging.exception("")
