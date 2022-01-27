@@ -85,8 +85,8 @@ if __name__ == "__main__":
             map(lambda pair: pair[1],
                 user_application_result_pairs))
 
-        account_number = repeat_prompt("How many transactions should be created?",
-                                       lambda: transaction_generator(application_results))
+        repeat_prompt("How many transactions should be created?",
+                      lambda: transaction_generator(application_results))
     except HTTPError as e:
         logging.error(f"{e}\n{e.response.text}")
         logging.exception("")
