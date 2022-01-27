@@ -20,3 +20,16 @@ def base_from_env(domain_env, port_env):
     domain = get_env(domain_env)
     port = get_env(port_env)
     return f"{domain}:{port}"
+
+
+def repeat(prompt, fn):
+    count = int(input(prompt))
+    results = []
+
+    for _ in range(count):
+        try:
+            results.append(fn())
+        except:
+            print("Error processing results")
+
+    return results
