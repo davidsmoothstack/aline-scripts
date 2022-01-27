@@ -28,7 +28,7 @@ def repeat(prompt, fn):
     count = int(input(prompt))
     results = []
 
-    for i in range(count):
+    for _ in range(count):
         try:
             results.append(fn())
             transient_failures = 0
@@ -37,6 +37,6 @@ def repeat(prompt, fn):
                 raise e
 
             transient_failures += 1
-            i -= 1
+            count += 1
 
     return results
