@@ -4,6 +4,7 @@ from requests.models import Response
 
 import helpers.store as store
 import helpers.util as util
+import helpers.authentication as auth
 from helpers.RequestBuilder import RequestBuilder
 
 __fake = Faker()
@@ -47,6 +48,6 @@ def login(username, password) -> Response:
                 .with_data(json_credentials)
                 .execute_request())
 
-    store.set_token(response.headers.get("Authorization"))
+    auth.set_token(response.headers.get("Authorization"))
 
     return response

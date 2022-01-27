@@ -1,3 +1,4 @@
+from asyncio.log import logger
 from dataclasses import dataclass
 
 from requests.api import request
@@ -43,10 +44,9 @@ class RequestBuilder():
 
         response.raise_for_status()
 
-        print(f"{response.url} successful")
+        logger.info(f"{response.url} successful")
 
         if response.status_code == 201:
-            print(response.json())
-            print("")
+            logger.info(response.json())
 
         return response

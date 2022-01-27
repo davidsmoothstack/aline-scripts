@@ -2,3 +2,4 @@
 **/store.json
 !.env.example
 __pycache__
+**/logs.txt

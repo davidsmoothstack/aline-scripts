@@ -1,6 +1,7 @@
+import logging
 import json
 import os
-import helpers.store as store
+from requests.models import HTTPError
 
 
 def get_env(env):
@@ -22,16 +23,23 @@ def base_from_env(domain_env, port_env):
     return f"{domain}:{port}"
 
 
-def is_logged_in():
-    return store.get_token() is not None
+def repeat_prompt(prompt, fn):
+    transient_failures = 0
+    transient_falure_threshold = 5
+    count = int(input(prompt))
+    results = []
 
+    for _ in range(count):
+        try:
+            results.append(fn())
+            transient_failures = 0
+        except HTTPError as e:
+            if transient_failures >= transient_falure_threshold:
+                logging.error("Too many transient errors. Exiting repeat loop")
+                raise e
 
-def auth_guard(func):
-    def decorator(*args):
-        if is_logged_in() == False:
-            raise Exception(
-                f"You need to be authenticated before you can call '{func.__name__}'")
+            logging.info("Transient error. Retrying request")
+            transient_failures += 1
+            count += 1
 
-        return func(*args)
-
-    return decorator
+    return results

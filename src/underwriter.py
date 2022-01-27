@@ -2,6 +2,7 @@ from faker import Faker
 
 import helpers.store as store
 import helpers.util as util
+import helpers.authentication as auth
 from helpers.RequestBuilder import RequestBuilder
 
 __fake = Faker()
@@ -39,12 +40,12 @@ def __fake_application_request(applicantIds):
     }
 
 
-@util.auth_guard
+@auth.auth_guard
 def create_applicant(applicant):
     json_applicant = util.to_json(applicant)
 
     return (RequestBuilder()
-            .with_bearer_token(store.get_token())
+            .with_bearer_token(auth.get_token())
             .with_default_headers()
             .with_method("POST")
             .with_url(base_url + "/applicants")
@@ -57,7 +58,7 @@ def create_application(applicantId):
     json_application = util.to_json(__fake_application_request(applicantIds))
 
     return (RequestBuilder()
-            .with_bearer_token(store.get_token())
+            .with_bearer_token(auth.get_token())
             .with_default_headers()
             .with_method("POST")
             .with_url(base_url + "/applications")
