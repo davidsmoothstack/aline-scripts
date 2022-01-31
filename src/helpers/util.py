@@ -31,7 +31,8 @@ def repeat_prompt(prompt, fn):
 
     for _ in range(count):
         try:
-            results.append(fn())
+            result = fn()
+            results.append(result)
             transient_failures = 0
         except HTTPError as e:
             if transient_failures >= transient_falure_threshold:
